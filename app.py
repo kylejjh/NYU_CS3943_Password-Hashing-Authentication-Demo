@@ -8,21 +8,12 @@ DATABASE = "users.db"
 
 
 def get_db_connection():
-    """
-    Connect to the SQLite database.
-    If users.db does not exist, SQLite will create it automatically.
-    """
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
     return conn
 
 
 def init_db():
-    """
-    Create the users table if it does not already exist.
-    I store username and password_hash.
-    I do NOT store the plain password.
-    """
     conn = get_db_connection()
     conn.execute(
         """
@@ -39,7 +30,42 @@ def init_db():
 
 @app.route("/")
 def home():
-    return "Database is ready. Register page will be added next."
+    return redirect(url_for("register"))
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    message = ""
+
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        # Convert password to bytes because bcrypt needs bytes
+        password_bytes = password.encode("utf-8")
+
+        # Generate salt and hash the password
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(password_bytes, salt)
+
+        # Convert hash back to string before saving to database
+        hashed_password_string = hashed_password.decode("utf-8")
+
+        try:
+            conn = get_db_connection()
+            conn.execute(
+                "INSERT INTO users (username, password_hash) VALUES (?, ?)",
+                (username, hashed_password_string),
+            )
+            conn.commit()
+            conn.close()
+
+            message = "Registration successful. Your password was hashed before saving."
+
+        except sqlite3.IntegrityError:
+            message = "Username already exists. Please choose another username."
+
+    return render_template("register.html", message=message)
 
 
 if __name__ == "__main__":
