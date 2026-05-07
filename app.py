@@ -41,14 +41,11 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
 
-        # Convert password to bytes because bcrypt needs bytes
         password_bytes = password.encode("utf-8")
 
-        # Generate salt and hash the password
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(password_bytes, salt)
 
-        # Convert hash back to string before saving to database
         hashed_password_string = hashed_password.decode("utf-8")
 
         try:
@@ -66,6 +63,42 @@ def register():
             message = "Username already exists. Please choose another username."
 
     return render_template("register.html", message=message)
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    message = ""
+
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        conn = get_db_connection()
+        user = conn.execute(
+            "SELECT * FROM users WHERE username = ?",
+            (username,)
+        ).fetchone()
+        conn.close()
+
+        if user is None:
+            message = "Login failed. Username does not exist."
+        else:
+            stored_hash = user["password_hash"]
+
+            password_bytes = password.encode("utf-8")
+            stored_hash_bytes = stored_hash.encode("utf-8")
+
+            if bcrypt.checkpw(password_bytes, stored_hash_bytes):
+                return redirect(url_for("dashboard", username=username))
+            else:
+                message = "Login failed. Wrong password."
+
+    return render_template("login.html", message=message)
+
+
+@app.route("/dashboard/<username>")
+def dashboard(username):
+    return render_template("dashboard.html", username=username)
 
 
 if __name__ == "__main__":
