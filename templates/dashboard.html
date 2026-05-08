@@ -2,24 +2,31 @@
 <html>
 <head>
     <title>Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Login Successful</h1>
+    <div class="container">
+        <h1>Login Successful</h1>
 
-    <h2>Welcome, {{ username }}!</h2>
+        <h2>Welcome, {{ username }}!</h2>
 
-    <p>
-        Your login worked because the password you typed matched the bcrypt hash stored in the database.
-    </p>
+        <div class="info">
+            <p>
+                Your login worked because the password you typed matched the bcrypt hash stored in the database.
+            </p>
 
-    <p>
-        The website never needed to store or show your real password.
-    </p>
+            <p>
+                The website never needed to store or show your real password.
+            </p>
 
-    <hr>
+            <p>
+                This shows how password hashing can make user authentication more secure.
+            </p>
 
-    <p>
-        <a href="/login">Back to Login</a>
-    </p>
+            <p>
+                <a href="/login">Back to Login</a>
+            </p>
+        </div>
+    </div>
 </body>
 </html>

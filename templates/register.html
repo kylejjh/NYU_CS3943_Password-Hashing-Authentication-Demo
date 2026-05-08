@@ -2,33 +2,38 @@
 <html>
 <head>
     <title>Register</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Password Hashing Authentication Demo</h1>
+    <div class="container">
+        <h1>Password Hashing Demo</h1>
+        <h2>Register</h2>
 
-    <h2>Register</h2>
+        <form method="POST">
+            <label>Username:</label>
+            <input type="text" name="username" required>
 
-    <form method="POST">
-        <label>Username:</label><br>
-        <input type="text" name="username" required><br><br>
+            <label>Password:</label>
+            <input type="password" name="password" required>
 
-        <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
+            <button type="submit">Create Account</button>
+        </form>
 
-        <button type="submit">Register</button>
-    </form>
+        {% if message %}
+            <div class="message">{{ message }}</div>
+        {% endif %}
 
-    <p>{{ message }}</p>
+        <div class="info">
+            <p>
+                This demo does not store the real password.
+                It stores a bcrypt hashed password in the database.
+            </p>
 
-    <hr>
-
-    <p>
-        This demo does not store the real password.
-        It stores a bcrypt hashed password in the database.
-    </p>
-
-    <p>
-        Already have an account? <a href="/login">Go to Login</a>
-    </p>
+            <p>
+                Already have an account?
+                <a href="/login">Go to Login</a>
+            </p>
+        </div>
+    </div>
 </body>
 </html>
