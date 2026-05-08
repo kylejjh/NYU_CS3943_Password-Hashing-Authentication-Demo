@@ -101,6 +101,15 @@ def dashboard(username):
     return render_template("dashboard.html", username=username)
 
 
+@app.route("/demo")
+def demo():
+    conn = get_db_connection()
+    users = conn.execute("SELECT username, password_hash FROM users").fetchall()
+    conn.close()
+
+    return render_template("demo.html", users=users)
+
+
 if __name__ == "__main__":
     init_db()
     app.run(debug=True)
