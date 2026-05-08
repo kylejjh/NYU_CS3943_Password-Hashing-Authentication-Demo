@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hash Demo</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Database Hash Demo</h1>
+
+        <div class="info">
+            <p>
+                This page shows what is stored in the database.
+                The real password is not stored.
+                Only the bcrypt password hash is stored.
+            </p>
+        </div>
+
+        {% if users %}
+            {% for user in users %}
+                <div class="message">
+                    <p><strong>Username:</strong> {{ user["username"] }}</p>
+                    <p><strong>Stored Password Hash:</strong></p>
+                    <p style="word-break: break-all;">{{ user["password_hash"] }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="message">
+                No users registered yet.
+            </div>
+        {% endif %}
+
+        <div class="info">
+            <p>
+                It is only included here to explain the project.
+            </p>
+
+            <p>
+                <a href="/register">Register</a> |
+                <a href="/login">Login</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
