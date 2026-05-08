@@ -2,33 +2,38 @@
 <html>
 <head>
     <title>Login</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Password Hashing Authentication Demo</h1>
+    <div class="container">
+        <h1>Password Hashing Demo</h1>
+        <h2>Login</h2>
 
-    <h2>Login</h2>
+        <form method="POST">
+            <label>Username:</label>
+            <input type="text" name="username" required>
 
-    <form method="POST">
-        <label>Username:</label><br>
-        <input type="text" name="username" required><br><br>
+            <label>Password:</label>
+            <input type="password" name="password" required>
 
-        <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
+            <button type="submit">Login</button>
+        </form>
 
-        <button type="submit">Login</button>
-    </form>
+        {% if message %}
+            <div class="message">{{ message }}</div>
+        {% endif %}
 
-    <p>{{ message }}</p>
+        <div class="info">
+            <p>
+                During login, the app does not decrypt the password.
+                It checks whether the typed password matches the saved bcrypt hash.
+            </p>
 
-    <hr>
-
-    <p>
-        During login, the app does not decrypt the password.
-        It checks whether the typed password matches the saved bcrypt hash.
-    </p>
-
-    <p>
-        <a href="/register">Go to Register</a>
-    </p>
+            <p>
+                Need an account?
+                <a href="/register">Go to Register</a>
+            </p>
+        </div>
+    </div>
 </body>
 </html>
